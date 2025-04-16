@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Pizzaroma</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/cadastro.css">
+</head>
+<body>
+    <div class="register-container">
+        <!-- Logo e Navegação -->
+        <nav class="register-nav">
+            <a href="../index.html" class="back-button">
+                <i class="bi bi-arrow-left"></i>
+                Voltar
+            </a>
+        </nav>
+
+        <!-- Container Principal -->
+        <div class="main-container">
+            <!-- Lado Esquerdo - Formulário -->
+            <div class="left-side">
+                <div class="register-form-container">
+                    <div class="logo-container">
+                        <h1>Pizzaroma</h1>
+                        <p>Crie sua conta</p>
+                    </div>
+
+                    <form class="register-form" id="registerForm">
+                        <div class="form-group">
+                            <label for="name">
+                                <i class="bi bi-person"></i>
+                                Nome Completo
+                            </label>
+                            <input type="text" id="name" class="form-control" placeholder="Seu nome completo" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">
+                                <i class="bi bi-envelope"></i>
+                                E-mail
+                            </label>
+                            <input type="email" id="email" class="form-control" placeholder="Seu melhor e-mail" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">
+                                <i class="bi bi-phone"></i>
+                                Telefone
+                            </label>
+                            <input type="tel" id="phone" class="form-control" placeholder="(00) 00000-0000" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">
+                                <i class="bi bi-lock"></i>
+                                Senha
+                            </label>
+                            <div class="password-input">
+                                <input type="password" id="password" class="form-control" placeholder="Crie uma senha forte" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('password')">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">
+                                <i class="bi bi-lock-fill"></i>
+                                Confirmar Senha
+                            </label>
+                            <div class="password-input">
+                                <input type="password" id="confirmPassword" class="form-control" placeholder="Confirme sua senha" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input type="checkbox" id="terms" class="form-check-input" required>
+                            <label class="form-check-label" for="terms">
+                                Li e aceito os <a href="#">Termos de Uso</a> e <a href="#">Política de Privacidade</a>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="register-button">Criar Conta</button>
+
+                        <div class="divider">
+                            <span>ou</span>
+                        </div>
+
+                        <div class="social-login">
+                            <button type="button" class="google-btn">
+                                <i class="bi bi-google"></i>
+                                Cadastrar com Google
+                            </button>
+                        </div>
+
+                        <div class="login-link">
+                            Já tem uma conta? <a href="login.html">Faça login</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Lado Direito - Imagem -->
+            <div class="right-side">
+                <div class="overlay"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function togglePassword(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleBtn = passwordInput.nextElementSibling.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.classList.replace('bi-eye', 'bi-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.classList.replace('bi-eye-slash', 'bi-eye');
+            }
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validação das senhas
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                alert('As senhas não coincidem!');
+                return;
+            }
+
+            // Aqui você implementará a lógica de cadastro
+            console.log('Cadastro submitted');
+        });
+
+        // Máscara para o telefone
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+            
+            if (value.length > 2) {
+                value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+            }
+            if (value.length > 9) {
+                value = `${value.slice(0, 9)}-${value.slice(9)}`;
+            }
+            
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>
