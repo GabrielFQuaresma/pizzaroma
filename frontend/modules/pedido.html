@@ -1,11 +1,196 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Personalizar Pedido - Pizzaroma</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/pedido.css">
 </head>
 <body>
-    pedido
+    <div class="order-container">
+        <!-- Navegação -->
+        <nav class="order-nav">
+            <a href="../index.html" class="back-button">
+                <i class="bi bi-arrow-left"></i>
+                Voltar para o Cardápio
+            </a>
+        </nav>
+
+        <!-- Container Principal -->
+        <div class="main-container">
+            <!-- Lado Esquerdo - Lista de Itens -->
+            <div class="left-side">
+                <div class="order-items-container">
+                    <div class="logo-container">
+                        <h1>Pizzaroma</h1>
+                        <p>Personalize seu Pedido</p>
+                    </div>
+
+                    <div class="order-items" id="orderItems">
+                        <!-- Items serão inseridos aqui via JavaScript -->
+                    </div>
+
+                    <button class="add-item-button" id="addNewPizza">
+                        <i class="bi bi-plus-circle"></i>
+                        Adicionar Nova Pizza
+                    </button>
+                </div>
+            </div>
+
+            <!-- Lado Direito - Customização -->
+            <div class="right-side">
+                <div class="customization-container">
+                    <div class="customization-header">
+                        <h2>Personalizar Pizza</h2>
+                        <p>Escolha as opções para sua pizza</p>
+                    </div>
+
+                    <form class="customization-form" id="customizationForm">
+                        <!-- Tamanho -->
+                        <div class="form-section">
+                            <h3>Tamanho</h3>
+                            <div class="size-options">
+                                <div class="size-option">
+                                    <input type="radio" name="size" id="small" value="small" required>
+                                    <label for="small">
+                                        <i class="bi bi-circle"></i>
+                                        <span>Pequena</span>
+                                        <span class="price">R$ 39,90</span>
+                                    </label>
+                                </div>
+                                <div class="size-option">
+                                    <input type="radio" name="size" id="medium" value="medium">
+                                    <label for="medium">
+                                        <i class="bi bi-circle"></i>
+                                        <span>Média</span>
+                                        <span class="price">R$ 49,90</span>
+                                    </label>
+                                </div>
+                                <div class="size-option">
+                                    <input type="radio" name="size" id="large" value="large">
+                                    <label for="large">
+                                        <i class="bi bi-circle"></i>
+                                        <span>Grande</span>
+                                        <span class="price">R$ 59,90</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sabores -->
+                        <div class="form-section">
+                            <h3>Sabores</h3>
+                            <div class="flavor-options">
+                                <div class="flavor-option">
+                                    <input type="checkbox" name="flavors" id="mozzarella" value="mozzarella">
+                                    <label for="mozzarella">
+                                        <span>Mussarela</span>
+                                        <span class="description">Molho de tomate, mussarela e orégano</span>
+                                    </label>
+                                </div>
+                                <div class="flavor-option">
+                                    <input type="checkbox" name="flavors" id="pepperoni" value="pepperoni">
+                                    <label for="pepperoni">
+                                        <span>Pepperoni</span>
+                                        <span class="description">Molho de tomate, mussarela e pepperoni</span>
+                                    </label>
+                                </div>
+                                <div class="flavor-option">
+                                    <input type="checkbox" name="flavors" id="margherita" value="margherita">
+                                    <label for="margherita">
+                                        <span>Margherita</span>
+                                        <span class="description">Molho de tomate, mussarela, tomate e manjericão</span>
+                                    </label>
+                                </div>
+                                <!-- Adicione mais sabores conforme necessário -->
+                            </div>
+                        </div>
+
+                        <!-- Borda -->
+                        <div class="form-section">
+                            <h3>Borda Recheada</h3>
+                            <div class="border-options">
+                                <div class="border-option">
+                                    <input type="radio" name="border" id="no-border" value="none" required>
+                                    <label for="no-border">
+                                        <span>Sem Borda</span>
+                                        <span class="price">+ R$ 0,00</span>
+                                    </label>
+                                </div>
+                                <div class="border-option">
+                                    <input type="radio" name="border" id="cheese-border" value="cheese">
+                                    <label for="cheese-border">
+                                        <span>Catupiry</span>
+                                        <span class="price">+ R$ 8,00</span>
+                                    </label>
+                                </div>
+                                <div class="border-option">
+                                    <input type="radio" name="border" id="cheddar-border" value="cheddar">
+                                    <label for="cheddar-border">
+                                        <span>Cheddar</span>
+                                        <span class="price">+ R$ 8,00</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ingredientes Extras -->
+                        <div class="form-section">
+                            <h3>Ingredientes Extras</h3>
+                            <div class="extra-options">
+                                <div class="extra-option">
+                                    <input type="checkbox" name="extras" id="extra-cheese" value="cheese">
+                                    <label for="extra-cheese">
+                                        <span>Mais Queijo</span>
+                                        <span class="price">+ R$ 5,00</span>
+                                    </label>
+                                </div>
+                                <div class="extra-option">
+                                    <input type="checkbox" name="extras" id="extra-pepperoni" value="pepperoni">
+                                    <label for="extra-pepperoni">
+                                        <span>Mais Pepperoni</span>
+                                        <span class="price">+ R$ 7,00</span>
+                                    </label>
+                                </div>
+                                <div class="extra-option">
+                                    <input type="checkbox" name="extras" id="extra-onion" value="onion">
+                                    <label for="extra-onion">
+                                        <span>Cebola</span>
+                                        <span class="price">+ R$ 3,00</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Observações -->
+                        <div class="form-section">
+                            <h3>Observações</h3>
+                            <textarea name="notes" id="notes" rows="3" class="form-control" 
+                                    placeholder="Alguma observação especial para o seu pedido?"></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="save-button">
+                                Salvar Alterações
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botão de Finalizar -->
+        <div class="finish-order-container">
+            <button id="finishOrder" class="finish-order-button">
+                Prosseguir para Pagamento
+                <span class="total-amount">R$ 0,00</span>
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/scripts/pedido.js"></script>
 </body>
 </html>

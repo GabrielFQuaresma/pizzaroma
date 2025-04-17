@@ -129,16 +129,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
-        if (!isLoggedIn) {
-            window.location.href = 'login.html';
-            return;
-        }
+        // if (!isLoggedIn) {
+        //     window.location.href = 'login.html';
+        //     return;
+        // }
         
         // Aqui você implementaria a lógica de checkout
-        alert('Pedido finalizado com sucesso!');
-        carrinho = [];
-        atualizarCarrinho();
-        cartModal.hide();
+        window.location.href = 'modules/pedido.html';
+        // alert('Pedido finalizado com sucesso!');
+        // carrinho = [];
+        // atualizarCarrinho();
+        // cartModal.hide();
     });
 
     // Perfil do usuário
