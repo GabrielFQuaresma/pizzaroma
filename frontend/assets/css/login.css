@@ -1,0 +1,285 @@
+:root {
+    --primary-color: #FF0000;
+    --primary-hover: #CC0000;
+    --background-color: #FFFFFF;
+    --text-color: #333333;
+    --border-color: #E5E5E5;
+    --gray-text: #666666;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--background-color);
+    min-height: 100vh;
+}
+
+.login-container {
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Navegação */
+.login-nav {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    z-index: 10;
+}
+
+.back-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.back-button:hover {
+    color: var(--primary-color);
+}
+
+/* Container Principal */
+.main-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Lado Esquerdo - Imagem */
+.left-side {
+    flex: 1;
+    background: url('../img/login-bg.jpg') center/cover;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+/* Lado Direito - Formulário */
+.right-side {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.login-form-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.logo-container h1 {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.logo-container p {
+    color: var(--gray-text);
+    font-size: 1.1rem;
+}
+
+/* Formulário */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.form-group label i {
+    color: var(--primary-color);
+}
+
+.form-control {
+    padding: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.1);
+    outline: none;
+}
+
+/* Campo de Senha */
+.password-input {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--gray-text);
+    cursor: pointer;
+}
+
+.toggle-password:hover {
+    color: var(--primary-color);
+}
+
+/* Opções do Formulário */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.forgot-password {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    color: var(--primary-hover);
+}
+
+/* Botão de Login */
+.login-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Divisor */
+.divider {
+    text-align: center;
+    position: relative;
+    margin: 1.5rem 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 45%;
+    height: 1px;
+    background-color: var(--border-color);
+}
+
+.divider::before {
+    left: 0;
+}
+
+.divider::after {
+    right: 0;
+}
+
+.divider span {
+    background-color: white;
+    padding: 0 1rem;
+    color: var(--gray-text);
+}
+
+/* Login Social */
+.google-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: white;
+    color: var(--text-color);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.google-btn:hover {
+    background-color: #f8f9fa;
+    border-color: var(--text-color);
+}
+
+/* Link de Registro */
+.register-link {
+    text-align: center;
+    color: var(--gray-text);
+}
+
+.register-link a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.register-link a:hover {
+    color: var(--primary-hover);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .left-side {
+        display: none;
+    }
+    
+    .right-side {
+        flex: 1;
+    }
+    
+    .login-form-container {
+        max-width: 100%;
+    }
+}
+

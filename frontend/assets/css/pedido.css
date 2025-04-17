@@ -1,0 +1,407 @@
+:root {
+    --primary-color: #FF0000;
+    --primary-hover: #CC0000;
+    --background-color: #FFFFFF;
+    --text-color: #333333;
+    --border-color: #E5E5E5;
+    --gray-text: #666666;
+    --success-color: #28a745;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--background-color);
+    min-height: 100vh;
+}
+
+.order-container {
+    min-height: 100vh;
+    position: relative;
+    padding-bottom: 80px; /* Espaço para o botão de finalizar */
+}
+
+/* Navegação */
+.order-nav {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    z-index: 10;
+}
+
+.back-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.back-button:hover {
+    color: var(--primary-color);
+}
+
+/* Container Principal */
+.main-container {
+    display: flex;
+    min-height: 100vh;
+    padding-top: 5rem;
+}
+
+/* Lado Esquerdo - Lista de Itens */
+.left-side {
+    flex: 1;
+    background-color: #f8f9fa;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.order-items-container {
+    max-width: 400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.logo-container h1 {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.logo-container p {
+    color: var(--gray-text);
+    font-size: 1.1rem;
+}
+
+/* Lista de Itens */
+.order-items {
+    margin-bottom: 2rem;
+}
+
+.order-item {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.order-item:hover {
+    transform: translateY(-2px);
+}
+
+.order-item.selected {
+    border: 2px solid var(--primary-color);
+}
+
+.order-item h4 {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 1.1rem;
+}
+
+.order-item p {
+    margin: 0.5rem 0 0;
+    color: var(--gray-text);
+    font-size: 0.9rem;
+}
+
+/* Botão Adicionar Item */
+.add-item-button {
+    width: 100%;
+    padding: 1rem;
+    background: none;
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    color: var(--gray-text);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.add-item-button:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Lado Direito - Customização */
+.right-side {
+    flex: 2;
+    padding: 2rem;
+}
+
+.customization-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.customization-header {
+    margin-bottom: 2rem;
+}
+
+.customization-header h2 {
+    color: var(--text-color);
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.customization-header p {
+    color: var(--gray-text);
+}
+
+/* Formulário de Customização */
+.form-section {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.form-section h3 {
+    color: var(--text-color);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+/* Opções de Tamanho */
+.size-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.size-option input[type="radio"] {
+    display: none;
+}
+
+.size-option label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.size-option label i {
+    font-size: 1.5rem;
+    color: var(--gray-text);
+}
+
+.size-option input[type="radio"]:checked + label {
+    border-color: var(--primary-color);
+    background-color: rgba(255, 0, 0, 0.05);
+}
+
+.size-option input[type="radio"]:checked + label i {
+    color: var(--primary-color);
+}
+
+/* Opções de Sabor */
+.flavor-options {
+    display: grid;
+    gap: 1rem;
+}
+
+.flavor-option {
+    position: relative;
+}
+
+.flavor-option input[type="checkbox"] {
+    display: none;
+}
+
+.flavor-option label {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.flavor-option label span:first-child {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.flavor-option label .description {
+    font-size: 0.9rem;
+    color: var(--gray-text);
+    margin-top: 0.3rem;
+}
+
+.flavor-option input[type="checkbox"]:checked + label {
+    border-color: var(--primary-color);
+    background-color: rgba(255, 0, 0, 0.05);
+}
+
+/* Opções de Borda e Extras */
+.border-options,
+.extra-options {
+    display: grid;
+    gap: 1rem;
+}
+
+.border-option input[type="radio"],
+.extra-option input[type="checkbox"] {
+    display: none;
+}
+
+.border-option label,
+.extra-option label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.border-option input[type="radio"]:checked + label,
+.extra-option input[type="checkbox"]:checked + label {
+    border-color: var(--primary-color);
+    background-color: rgba(255, 0, 0, 0.05);
+}
+
+.price {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+/* Botões de Ação */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+.save-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Botão de Finalizar */
+.finish-order-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    padding: 1rem;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+.finish-order-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.finish-order-button:hover {
+    background-color: var(--primary-hover);
+}
+
+.total-amount {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+}
+
+/* Responsividade */
+@media (max-width: 992px) {
+    .main-container {
+        flex-direction: column;
+    }
+
+    .left-side,
+    .right-side {
+        padding: 1rem;
+    }
+
+    .order-items-container,
+    .customization-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .order-nav {
+        position: static;
+        padding: 1rem;
+    }
+
+    .size-options {
+        grid-template-columns: 1fr;
+    }
+
+    .main-container {
+        padding-top: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-container h1 {
+        font-size: 2rem;
+    }
+
+    .form-section {
+        padding: 1rem;
+    }
+
+    .finish-order-button {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+}

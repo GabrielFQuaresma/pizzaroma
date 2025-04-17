@@ -1,0 +1,329 @@
+:root {
+    --primary-color: #FF0000;
+    --primary-hover: #CC0000;
+    --background-color: #FFFFFF;
+    --text-color: #333333;
+    --border-color: #E5E5E5;
+    --gray-text: #666666;
+    --success-color: #28a745;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--background-color);
+    min-height: 100vh;
+}
+
+.payment-container {
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Navegação */
+.payment-nav {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    z-index: 10;
+}
+
+.back-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.back-button:hover {
+    color: var(--primary-color);
+}
+
+/* Container Principal */
+.main-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Lado Esquerdo - Formulário */
+.left-side {
+    flex: 1.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-color: var(--background-color);
+}
+
+.payment-form-container {
+    width: 100%;
+    max-width: 600px;
+    padding: 2rem;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.logo-container h1 {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.logo-container p {
+    color: var(--gray-text);
+    font-size: 1.1rem;
+}
+
+/* Formulário */
+.payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.form-section {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.form-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-color);
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-section h3 i {
+    color: var(--primary-color);
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.flex-grow-2 {
+    flex: 2;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.1);
+    outline: none;
+}
+
+/* Opções de Pagamento */
+.payment-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.payment-option {
+    position: relative;
+    height: 100%;
+}
+
+.payment-option input[type="radio"] {
+    display: none;
+}
+
+.payment-option label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    height: 100%;
+    min-height: 120px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: white;
+}
+
+.payment-option label i {
+    font-size: 2rem;
+    color: var(--gray-text);
+    margin-bottom: 0.5rem;
+}
+
+.payment-option input[type="radio"]:checked + label {
+    border-color: var(--primary-color);
+    background-color: rgba(255, 0, 0, 0.05);
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.payment-option input[type="radio"]:checked + label i {
+    color: var(--primary-color);
+}
+
+.payment-option label:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Botão de Finalizar */
+.finish-payment-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.finish-payment-button:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Lado Direito - Resumo do Pedido */
+.right-side {
+    flex: 1;
+    background-color: #f8f9fa;
+    padding: 2rem;
+    position: relative;
+}
+
+.order-summary {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+    position: sticky;
+    top: 2rem;
+    transition: all 0.3s ease;
+}
+
+.order-summary h2 {
+    color: var(--text-color);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.order-items {
+    margin-bottom: 1.5rem;
+}
+
+.order-total {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+}
+
+.order-total > div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    color: var(--gray-text);
+}
+
+.order-total .total {
+    color: var(--text-color);
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+/* Responsividade */
+@media (max-width: 992px) {
+    .main-container {
+        flex-direction: column;
+    }
+
+    .right-side {
+        padding: 1rem;
+    }
+
+    .payment-options {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .order-summary {
+        position: static;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .payment-nav {
+        position: static;
+        padding: 1rem;
+    }
+
+    .payment-form-container {
+        padding: 1rem;
+    }
+
+    .payment-options {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .payment-option label {
+        min-height: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-container h1 {
+        font-size: 2rem;
+    }
+
+    .form-section {
+        padding: 1rem;
+    }
+}
