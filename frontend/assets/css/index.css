@@ -87,9 +87,9 @@ body {
 
 /* Hero Section */
 .hero-section {
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../images/hero-bg.jpg');
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../img/BannerImage.png');
     background-size: cover;
-    background-position: center;
+    background-position: center top;
     color: white;
     padding: 8rem 0;
     margin-top: 76px;
