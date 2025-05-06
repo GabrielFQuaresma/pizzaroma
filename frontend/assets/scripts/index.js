@@ -95,22 +95,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // Botões de adicionar ao carrinho
     document.querySelectorAll('.add-to-cart-btn').forEach(button => {
         button.addEventListener('click', (e) => {
-            const card = e.target.closest('.promo-card');
-            const nome = card.querySelector('h3').textContent;
-            const preco = parseFloat(card.querySelector('.price').textContent.replace('R$ ', ''));
-            const id = carrinho.length + 1; // Simplificado para exemplo
+            const card = e.target.closest('.promo-card, .pizza-card'); // Modificado para aceitar ambas as classes
+            if (card) { // Verifica se o card foi encontrado
+                const nome = card.querySelector('h3').textContent;
+                const precoText = card.querySelector('.price').textContent;
+                const preco = parseFloat(precoText.replace('R$ ', '').replace(',', '.')); // Adicionado replace para vírgula
+                const id = nome + '-' + preco; // Usar uma combinação de nome e preço para um ID mais único
+
+                adicionarAoCarrinho(id, nome, preco);
             
-            adicionarAoCarrinho(id, nome, preco);
+                // Feedback visual
+                const originalText = button.textContent;
+                button.textContent = 'Adicionado!';
+                button.disabled = true;
             
-            // Feedback visual
-            const originalText = button.textContent;
-            button.textContent = 'Adicionado!';
-            button.disabled = true;
-            
-            setTimeout(() => {
-                button.textContent = originalText;
-                button.disabled = false;
-            }, 1000);
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.disabled = false;
+                }, 1000);
+            }
         });
     });
 
