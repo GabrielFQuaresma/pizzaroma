@@ -134,8 +134,11 @@ document.addEventListener('DOMContentLoaded', () => {
         //     return;
         // }
         
+        // Salva os itens do carrinho no localStorage
+        localStorage.setItem('cartItems', JSON.stringify(carrinho));
+        
         // Aqui você implementaria a lógica de checkout
-        window.location.href = 'modules/pagamento.html';
+        window.location.href = 'modules/pedido.html';
         // alert('Pedido finalizado com sucesso!');
         // carrinho = [];
         // atualizarCarrinho();
@@ -180,4 +183,4 @@ document.querySelectorAll('.nav-item').forEach(item => {
         // Adiciona a classe active ao item clicado
         e.currentTarget.classList.add('active');
     });
-}); 
+});

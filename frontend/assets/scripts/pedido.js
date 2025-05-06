@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Elementos do DOM
     const orderItems = document.getElementById('orderItems');
-    const addNewPizzaBtn = document.getElementById('addNewPizza');
+    // const addNewPizzaBtn = document.getElementById('addNewPizza'); // Removido
     const customizationForm = document.getElementById('customizationForm');
     const finishOrderBtn = document.getElementById('finishOrder');
     
@@ -35,12 +35,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
         orderState.items = cartItems.map(item => ({
             ...item,
+            name: item.nome, 
             size: 'medium',
             border: 'none',
             extras: [],
             notes: ''
         }));
         renderOrderItems();
+        if (orderState.items.length > 0) {
+            selectItem(0); // Seleciona o primeiro item automaticamente
+        }
     }
 
     // Renderizar lista de itens
@@ -48,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
         orderItems.innerHTML = orderState.items.map((item, index) => `
             <div class="order-item ${index === orderState.selectedItemIndex ? 'selected' : ''}" 
                  onclick="selectItem(${index})">
-                <h4>${item.name}</h4>
+                <h4>${item.name}</h4> 
                 <p>
                     ${item.size.charAt(0).toUpperCase() + item.size.slice(1)} | 
                     ${item.border === 'none' ? 'Sem Borda' : `Borda de ${item.border}`}
@@ -62,7 +66,10 @@ document.addEventListener('DOMContentLoaded', function() {
     window.selectItem = function(index) {
         orderState.selectedItemIndex = index;
         renderOrderItems();
-        loadItemToForm(orderState.items[index]);
+        if (orderState.items[index]) { // Verifica se o item existe
+            loadItemToForm(orderState.items[index]);
+        }
+        calculateTotal(); // Adicionado para recalcular o total ao selecionar um item
     };
 
     // Carregar item no formulário
@@ -98,20 +105,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Adicionar nova pizza
-    addNewPizzaBtn.addEventListener('click', function() {
-        const newPizza = {
-            name: 'Nova Pizza',
-            size: 'medium',
-            border: 'none',
-            extras: [],
-            notes: ''
-        };
-        orderState.items.push(newPizza);
-        orderState.selectedItemIndex = orderState.items.length - 1;
-        renderOrderItems();
-        loadItemToForm(newPizza);
-        calculateTotal();
-    });
+    // Event listener removido pois o botão foi removido do HTML
+    // addNewPizzaBtn.addEventListener('click', function() {
+    //     const newPizza = {
+    //         name: 'Nova Pizza', // Mantido como 'name' para consistência
+    //         size: 'medium',
+    //         border: 'none',
+    //         extras: [],
+    //         notes: ''
+    //     };
+    //     orderState.items.push(newPizza);
+    //     orderState.selectedItemIndex = orderState.items.length - 1;
+    //     renderOrderItems();
+    //     loadItemToForm(newPizza);
+    //     calculateTotal();
+    // });
 
     // Salvar alterações do formulário
     customizationForm.addEventListener('submit', function(e) {
