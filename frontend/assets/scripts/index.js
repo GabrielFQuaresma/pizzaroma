@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('cartItems', JSON.stringify(carrinho));
         
         // Aqui você implementaria a lógica de checkout
-        window.location.href = 'modules/pagamento.html';
+        window.location.href = 'modules/pedido.html';
         // alert('Pedido finalizado com sucesso!');
         // carrinho = [];
         // atualizarCarrinho();
