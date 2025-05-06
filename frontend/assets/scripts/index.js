@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('cartItems', JSON.stringify(carrinho));
         
         // Aqui você implementaria a lógica de checkout
-        window.location.href = 'modules/pedido.html';
+        window.location.href = 'modules/pagamento.html';
         // alert('Pedido finalizado com sucesso!');
         // carrinho = [];
         // atualizarCarrinho();
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Perfil do usuário
     document.getElementById('userProfile').addEventListener('click', (e) => {
         e.preventDefault();
-        window.location.href = isLoggedIn ? 'profile.html' : 'login.html';
+        window.location.href = isLoggedIn ? 'profile.html' : './modules/login.html';
     });
 
     // Inicialização do carrinho
