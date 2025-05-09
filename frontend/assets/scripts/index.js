@@ -72,14 +72,112 @@ function atualizarCarrinho() {
     cartTotal.textContent = `R$ ${total.toFixed(2)}`;
 }
 
+// Função para criar card de pizza (usada tanto para cardápio quanto promoções)
+function criarPizzaCard(pizza, isPromocao = false) {
+    const cardClass = isPromocao ? 'promo-card' : 'pizza-card';
+    const imagePath = pizza.imagemUrl ? pizza.imagemUrl : 'assets/img/pizza-placeholder.jpg'; // Placeholder se não houver imagem
+
+    return `
+        <div class="${cardClass}" data-pizza-id="${pizza.id}">
+            <img src="${imagePath}" alt="${pizza.nome}">
+            <div class="${isPromocao ? 'promo-info' : 'pizza-info'}">
+                <h3>${pizza.nome}</h3>
+                <p>${pizza.descricao}</p>
+                <span class="price">R$ ${parseFloat(pizza.precoBase).toFixed(2).replace('.', ',')}</span>
+                <button class="add-to-cart-btn">Adicionar ao Carrinho</button>
+            </div>
+        </div>
+    `;
+}
+
+// Função para carregar e exibir todas as pizzas no cardápio
+async function carregarCardapio() {
+    const pizzasGrid = document.querySelector('.pizzas-grid');
+    if (!pizzasGrid) return;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/sabores`);
+        if (!response.ok) {
+            throw new Error(`Erro HTTP: ${response.status}`);
+        }
+        const pizzas = await response.json();
+
+        if (pizzas.length === 0) {
+            pizzasGrid.innerHTML = '<p class="text-center w-100">Nenhuma pizza cadastrada no momento.</p>';
+            return;
+        }
+        pizzasGrid.innerHTML = pizzas.map(pizza => criarPizzaCard(pizza, false)).join('');
+        adicionarListenersAosBotoesCarrinho(); // Re-adicionar listeners aos novos botões
+    } catch (error) {
+        console.error('Falha ao carregar cardápio:', error);
+        pizzasGrid.innerHTML = '<p class="text-center w-100">Não foi possível carregar o cardápio. Tente novamente mais tarde.</p>';
+    }
+}
+
+// Função para carregar e exibir pizzas em promoção
+async function carregarPromocoes() {
+    const promotionsGrid = document.querySelector('.promotions-grid');
+    if (!promotionsGrid) return;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/sabores/promocoes`);
+        if (!response.ok) {
+            throw new Error(`Erro HTTP: ${response.status}`);
+        }
+        const pizzasEmPromocao = await response.json();
+
+        if (pizzasEmPromocao.length === 0) {
+            promotionsGrid.innerHTML = '<p class="text-center w-100">Nenhuma promoção disponível no momento.</p>';
+            return;
+        }
+        promotionsGrid.innerHTML = pizzasEmPromocao.map(pizza => criarPizzaCard(pizza, true)).join('');
+        adicionarListenersAosBotoesCarrinho(); // Re-adicionar listeners aos novos botões
+    } catch (error) {
+        console.error('Falha ao carregar promoções:', error);
+        promotionsGrid.innerHTML = '<p class="text-center w-100">Não foi possível carregar as promoções. Tente novamente mais tarde.</p>';
+    }
+}
+
+// Função para adicionar listeners aos botões "Adicionar ao Carrinho"
+// Deve ser chamada após a criação dinâmica dos cards
+function adicionarListenersAosBotoesCarrinho() {
+    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+        // Remove listener antigo para evitar duplicação se a função for chamada múltiplas vezes
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+
+        newButton.addEventListener('click', (e) => {
+            const card = e.target.closest('.promo-card, .pizza-card');
+            if (card) {
+                const nome = card.querySelector('h3').textContent;
+                const precoText = card.querySelector('.price').textContent;
+                const preco = parseFloat(precoText.replace('R$ ', '').replace(',', '.'));
+                // Idealmente, o ID viria diretamente do atributo data-pizza-id ou de um campo oculto
+                const id = card.dataset.pizzaId || (nome + '-' + preco); // Fallback se data-pizza-id não estiver presente
+
+                adicionarAoCarrinho(id, nome, preco);
+
+                const originalText = newButton.textContent;
+                newButton.textContent = 'Adicionado!';
+                newButton.disabled = true;
+
+                setTimeout(() => {
+                    newButton.textContent = originalText;
+                    newButton.disabled = false;
+                }, 1000);
+            }
+        });
+    });
+}
+
 // Função para pesquisar pizzas
 function pesquisarPizzas(termo) {
-    const pizzaCards = document.querySelectorAll('.pizza-card');
-    
+    const termoPesquisa = termo.toLowerCase().trim();
+    const pizzaCards = document.querySelectorAll('.pizzas-grid .pizza-card'); // Seleciona apenas cards do cardápio principal
+
     pizzaCards.forEach(card => {
         const titulo = card.querySelector('h3').textContent.toLowerCase();
         const descricao = card.querySelector('p').textContent.toLowerCase();
-        const termoPesquisa = termo.toLowerCase();
         
         if (titulo.includes(termoPesquisa) || descricao.includes(termoPesquisa)) {
             card.style.display = 'block';
@@ -91,30 +189,61 @@ function pesquisarPizzas(termo) {
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
-    // Botões de adicionar ao carrinho
-    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-        button.addEventListener('click', (e) => {
-            const card = e.target.closest('.promo-card, .pizza-card'); // Modificado para aceitar ambas as classes
-            if (card) { // Verifica se o card foi encontrado
-                const nome = card.querySelector('h3').textContent;
-                const precoText = card.querySelector('.price').textContent;
-                const preco = parseFloat(precoText.replace('R$ ', '').replace(',', '.')); // Adicionado replace para vírgula
-                const id = nome + '-' + preco; // Usar uma combinação de nome e preço para um ID mais único
+    //Verificação de login
+    const token = localStorage.getItem('jwtToken');
+    let isLoggedIn = false;
+    let userRole = null;
 
-                adicionarAoCarrinho(id, nome, preco);
-            
-                // Feedback visual
-                const originalText = button.textContent;
-                button.textContent = 'Adicionado!';
-                button.disabled = true;
-            
-                setTimeout(() => {
-                    button.textContent = originalText;
-                    button.disabled = false;
-                }, 1000);
+    if (token) {
+        try {
+            const decoded = jwt_decode(token); 
+            const currentTime = Date.now() / 1000;
+
+            if (decoded.exp && decoded.exp > currentTime) {
+                isLoggedIn = true;
+                userRole = decoded.role; 
+            } else {
+                console.log("Sessão expirou.");
+                localStorage.removeItem('jwtToken');
             }
+        } catch (error) {
+            console.error('Token inválido ou malformado', error);
+            localStorage.removeItem('jwtToken');
+        }
+    }
+
+    if (isLoggedIn && userRole === 'ADMIN') {
+        const navbarNav = document.querySelector('#navbarNav .navbar-nav');
+        if (navbarNav) {
+            const cadastrarPizzaLi = document.createElement('li');
+            cadastrarPizzaLi.classList.add('nav-item');
+            cadastrarPizzaLi.innerHTML = `<a class="nav-link" href="./modules/cadastroPizza.html">Cadastrar Pizza</a>`;
+            
+            const userProfileLink = document.getElementById('userProfileLink'); 
+            if (userProfileLink && userProfileLink.parentElement.classList.contains('nav-item')) {
+                navbarNav.insertBefore(cadastrarPizzaLi, userProfileLink.parentElement);
+            } else {
+                const lastNavItem = navbarNav.querySelector('.nav-right') || navbarNav.lastElementChild;
+                if (lastNavItem) {
+                     navbarNav.insertBefore(cadastrarPizzaLi, lastNavItem);
+                } else {
+                    navbarNav.appendChild(cadastrarPizzaLi);
+                }
+            }
+        }
+    }
+
+    const userProfileElement = document.getElementById('userProfile');
+    if (userProfileElement) {
+        userProfileElement.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = isLoggedIn ? './modules/userInfo.html' : './modules/login.html';
         });
-    });
+    }
+
+    // Carregar cardápio e promoções
+    carregarCardapio();
+    carregarPromocoes();
 
     // Modal do carrinho
     const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
@@ -146,65 +275,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // atualizarCarrinho();
         // cartModal.hide();
     });
-
-
-    //Verificação de login
-        const token = localStorage.getItem('jwtToken');
-        let isLoggedIn = false;
-        let userRole = null;
-
-        if (token) {
-            try {
-                const decoded = jwt_decode(token); // Ensure jwt_decode is available
-                const currentTime = Date.now() / 1000;
-
-                if (decoded.exp && decoded.exp > currentTime) {
-                    isLoggedIn = true;
-                    userRole = decoded.role; // Assuming 'role' is in your JWT payload
-                } else {
-                    // Token expirado - remova do localStorage
-                    console.log("Sessão expirou.");
-                    localStorage.removeItem('jwtToken');
-                }
-            } catch (error) {
-                console.error('Token inválido ou malformado', error);
-                localStorage.removeItem('jwtToken');
-            }
-        }
-
-        // Adicionar link "Cadastrar Pizza" se for admin
-        if (isLoggedIn && userRole === 'ADMIN') {
-            const navbarNav = document.querySelector('#navbarNav .navbar-nav');
-            if (navbarNav) {
-                const cadastrarPizzaLi = document.createElement('li');
-                cadastrarPizzaLi.classList.add('nav-item');
-                cadastrarPizzaLi.innerHTML = `<a class="nav-link" href="./modules/cadastroPizza.html">Cadastrar Pizza</a>`;
-                
-                // Inserir antes do último item (ou ajustar conforme necessário)
-                // Se houver um ícone de usuário ou carrinho, pode ser antes deles
-                const userProfileLink = document.getElementById('userProfileLink'); // Assuming your user icon/link has this ID
-                if (userProfileLink && userProfileLink.parentElement.classList.contains('nav-item')) {
-                    navbarNav.insertBefore(cadastrarPizzaLi, userProfileLink.parentElement);
-                } else {
-                     // Fallback: Adiciona ao final da lista de navegação principal se não encontrar um ponto específico
-                    const lastNavItem = navbarNav.querySelector('.nav-right') || navbarNav.lastElementChild;
-                    if (lastNavItem) {
-                         navbarNav.insertBefore(cadastrarPizzaLi, lastNavItem);
-                    } else {
-                        navbarNav.appendChild(cadastrarPizzaLi); // Append if no other items or specific target
-                    }
-                }
-            }
-        }
-
-        const userProfileElement = document.getElementById('userProfile');
-        if (userProfileElement) {
-            userProfileElement.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.location.href = isLoggedIn ? './modules/userInfo.html' : './modules/login.html';
-            });
-        }
-
 
     // Inicialização do carrinho
     atualizarCarrinho();

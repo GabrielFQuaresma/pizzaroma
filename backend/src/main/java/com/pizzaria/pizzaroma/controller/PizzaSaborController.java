@@ -1,7 +1,11 @@
 package com.pizzaria.pizzaroma.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pizzaria.pizzaroma.dto.CriarPizzaSaborRequest;
+import com.pizzaria.pizzaroma.dto.PizzaSaborResponse;
 import com.pizzaria.pizzaroma.entity.PizzaSabor;
 import com.pizzaria.pizzaroma.repository.PizzaSaborRepository;
 import com.pizzaria.pizzaroma.security.JwtService;
@@ -57,6 +62,16 @@ public class PizzaSaborController {
         saborRepository.save(sabor);
 
         return ResponseEntity.ok("Sabor adicionado com sucesso.");
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PizzaSaborResponse>> listarSabores() {
+        List<PizzaSabor> sabores = saborRepository.findAll();
+        List<PizzaSaborResponse> response = sabores.stream()
+            .map(PizzaSaborResponse::new)
+            .collect(Collectors.toList());
+
+        return ResponseEntity.ok(response);
     }
 }
 
