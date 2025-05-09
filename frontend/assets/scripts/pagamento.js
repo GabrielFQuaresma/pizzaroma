@@ -171,10 +171,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
             let bordaEnum;
             switch (item.border ? item.border.toLowerCase() : 'none') {
-                case 'none': bordaEnum = 'SEM_BORDA'; break;
+                case 'none': bordaEnum = 'VAZIA'; break;
                 case 'cheese': bordaEnum = 'CATUPIRY'; break; // Assuming 'cheese' maps to CATUPIRY
                 case 'cheddar': bordaEnum = 'CHEDDAR'; break;
-                default: bordaEnum = 'SEM_BORDA'; // Default case
+                default: bordaEnum = 'VAZIA'; // Default case
             }
 
             return {
@@ -204,18 +204,18 @@ document.addEventListener('DOMContentLoaded', function() {
         const criarPedidoRequest = {
             itens: mappedItems,
             cep: formData.get('cep'),
-            rua: document.getElementById('rua').value, // Ensure these are correctly fetched
+            rua: formData.get('rua'), // Changed to formData.get()
             numero: formData.get('numero'),
             complemento: formData.get('complemento'),
-            bairro: document.getElementById('bairro').value,
-            cidade: document.getElementById('cidade').value,
+            bairro: formData.get('bairro'), // Changed to formData.get()
+            cidade: formData.get('cidade'), // Changed to formData.get()
             valorParaTroco: valorParaTroco
         };
 
         console.log('Enviando dados do pedido:', JSON.stringify(criarPedidoRequest, null, 2));
 
         try {
-            const response = await fetch('/pedido/criar', { 
+            const response = await fetch(`${API_BASE_URL}/pedido/criar`, { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

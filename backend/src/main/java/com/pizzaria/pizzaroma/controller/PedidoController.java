@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin; // Import CrossOrigin
 
 import com.pizzaria.pizzaroma.dto.CriarPedidoRequest;
 import com.pizzaria.pizzaroma.dto.ItemPedidoRequest;
@@ -27,6 +28,7 @@ import com.pizzaria.pizzaroma.repository.ClienteRepository;
 
 @RestController
 @RequestMapping("/pedido")
+// @CrossOrigin(origins = "*") // Added CrossOrigin annotation
 public class PedidoController {
 
     private final PedidoRepository pedidoRepository;
@@ -51,6 +53,12 @@ public class PedidoController {
     @PostMapping("/criar")
     public ResponseEntity<?> criarPedido(@RequestBody CriarPedidoRequest request,
                                         @RequestHeader("Authorization") String token) {
+
+        if (token != null && token.startsWith("Bearer ")){
+            token = token.substring(7);
+        }
+        System.out.println(jwtService.extractRole(token));
+        
         String email = jwtService.extractEmailFromToken(token);
         Cliente cliente = clienteRepository.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
