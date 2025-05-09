@@ -8,18 +8,24 @@ import com.pizzaria.pizzaroma.entity.Administrador;
 import com.pizzaria.pizzaroma.entity.Usuario;
 import com.pizzaria.pizzaroma.entity.Funcionario;
 import com.pizzaria.pizzaroma.entity.Cliente;
+import com.pizzaria.pizzaroma.dto.LoginRequest;
 import com.pizzaria.pizzaroma.dto.RegisterRequest;
 import com.pizzaria.pizzaroma.repository.UsuarioRepository;
+import com.pizzaria.pizzaroma.security.JwtService;
+
+import io.jsonwebtoken.Jwt;
 
 @Service
 public class AuthService {
     
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public AuthService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder){
+    public AuthService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, JwtService jwtService){
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public void register(RegisterRequest request){
@@ -47,5 +53,16 @@ public class AuthService {
         }
 
         usuarioRepository.save(usuario);
+    }
+
+    public String login(LoginRequest request) {
+        Usuario usuario = usuarioRepository.findByEmail(request.getEmail())
+            .orElseThrow(() -> new IllegalArgumentException("Email não encontrado"));
+        
+        if (!passwordEncoder.matches(request.getSenha(), usuario.getSenha())){
+            throw new IllegalArgumentException("Senha incorreta");
+        }
+
+        return jwtService.generateToken(usuario.getEmail(), usuario.getRole().name());
     }
 }

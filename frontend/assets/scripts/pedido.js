@@ -30,102 +30,111 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedItemIndex: null
     };
 
+    // Helper function to calculate price for a single item
+    function calculateItemPrice(item) {
+        if (!item || !item.size || !PRICES.sizes[item.size]) {
+            console.error("Invalid item or size for price calculation", item);
+            return 0; // Default to 0 if item or size is invalid
+        }
+        let itemTotal = PRICES.sizes[item.size];
+        if (item.border && PRICES.borders[item.border]) {
+            itemTotal += PRICES.borders[item.border];
+        }
+        if (item.extras && Array.isArray(item.extras)) {
+            item.extras.forEach(extra => {
+                if (PRICES.extras[extra]) {
+                    itemTotal += PRICES.extras[extra];
+                }
+            });
+        }
+        return itemTotal;
+    }
+
     // Carregar itens do carrinho
     function loadCartItems() {
         const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
         orderState.items = cartItems.map(item => ({
-            ...item,
-            name: item.nome, 
-            size: 'medium',
-            border: 'none',
-            extras: [],
-            notes: ''
+            id: item.id, // Preserve the original ID (expected to be saborId)
+            name: item.nome || 'Pizza', // Use 'nome' from cart or a default
+            size: item.size || 'medium', // Default if not set
+            border: item.border || 'none', // Default if not set
+            extras: item.extras || [], // Default if not set
+            notes: item.notes || '', // Default if not set
+            quantidade: item.quantidade || 1, // Default to 1 if not set
+            // finalPrice will be calculated when item is loaded to form or saved
         }));
-        renderOrderItems();
+
+        renderOrderItems(); // Render items first
+
         if (orderState.items.length > 0) {
-            selectItem(0); // Seleciona o primeiro item automaticamente
+            selectItem(0); // Select the first item, which will also load it to form & calc price
+        } else {
+            calculateTotal(); // Calculate total (R$ 0,00) if cart is empty
         }
     }
 
     // Renderizar lista de itens
     function renderOrderItems() {
-        orderItems.innerHTML = orderState.items.map((item, index) => `
+        orderItems.innerHTML = orderState.items.map((item, index) => {
+            const currentPrice = item.finalPrice !== undefined ? item.finalPrice : calculateItemPrice(item);
+            return `
             <div class="order-item ${index === orderState.selectedItemIndex ? 'selected' : ''}" 
                  onclick="selectItem(${index})">
-                <h4>${item.name}</h4> 
+                <h4>${item.name} (x${item.quantidade || 1})</h4> 
                 <p>
-                    ${item.size.charAt(0).toUpperCase() + item.size.slice(1)} | 
-                    ${item.border === 'none' ? 'Sem Borda' : `Borda de ${item.border}`}
-                    ${item.extras.length ? ` | Extras: ${item.extras.join(', ')}` : ''}
+                    ${item.size ? item.size.charAt(0).toUpperCase() + item.size.slice(1) : 'Tamanho não definido'} | 
+                    ${item.border === 'none' ? 'Sem Borda' : `Borda de ${item.border.charAt(0).toUpperCase() + item.border.slice(1)}`}
+                    ${item.extras && item.extras.length ? ` | Extras: ${item.extras.join(', ')}` : ''}
                 </p>
+                <p>Preço Unitário: R$ ${currentPrice.toFixed(2)}</p>
             </div>
-        `).join('');
+        `}).join('');
     }
 
     // Selecionar item para edição
     window.selectItem = function(index) {
         orderState.selectedItemIndex = index;
-        renderOrderItems();
-        if (orderState.items[index]) { // Verifica se o item existe
-            loadItemToForm(orderState.items[index]);
+        if (orderState.items[index]) {
+            const item = orderState.items[index];
+            // Ensure finalPrice is calculated if not already set
+            if (item.finalPrice === undefined) {
+                item.finalPrice = calculateItemPrice(item);
+            }
+            loadItemToForm(item);
         }
-        calculateTotal(); // Adicionado para recalcular o total ao selecionar um item
+        renderOrderItems(); // Re-render to update selection highlight and potentially prices
+        calculateTotal(); 
     };
 
     // Carregar item no formulário
     function loadItemToForm(item) {
-        // Tamanho
-        document.querySelector(`input[name="size"][value="${item.size}"]`).checked = true;
-
-        // Borda
-        document.querySelector(`input[name="border"][value="${item.border}"]`).checked = true;
-
-        // Extras
+        document.querySelector(`input[name="size"][value="${item.size || 'medium'}"]`).checked = true;
+        document.querySelector(`input[name="border"][value="${item.border || 'none'}"]`).checked = true;
         document.querySelectorAll('input[name="extras"]').forEach(input => {
-            input.checked = item.extras.includes(input.value);
+            input.checked = item.extras && item.extras.includes(input.value);
         });
-
-        // Observações
         document.getElementById('notes').value = item.notes || '';
     }
 
     // Calcular preço total do pedido
     function calculateTotal() {
         const total = orderState.items.reduce((sum, item) => {
-            let itemTotal = PRICES.sizes[item.size];
-            itemTotal += PRICES.borders[item.border];
-            item.extras.forEach(extra => {
-                itemTotal += PRICES.extras[extra];
-            });
-            return sum + itemTotal;
+            const pricePerItem = item.finalPrice !== undefined ? item.finalPrice : calculateItemPrice(item);
+            return sum + (pricePerItem * (item.quantidade || 1));
         }, 0);
 
         document.querySelector('.total-amount').textContent = `R$ ${total.toFixed(2)}`;
         return total;
     }
 
-    // Adicionar nova pizza
-    // Event listener removido pois o botão foi removido do HTML
-    // addNewPizzaBtn.addEventListener('click', function() {
-    //     const newPizza = {
-    //         name: 'Nova Pizza', // Mantido como 'name' para consistência
-    //         size: 'medium',
-    //         border: 'none',
-    //         extras: [],
-    //         notes: ''
-    //     };
-    //     orderState.items.push(newPizza);
-    //     orderState.selectedItemIndex = orderState.items.length - 1;
-    //     renderOrderItems();
-    //     loadItemToForm(newPizza);
-    //     calculateTotal();
-    // });
-
     // Salvar alterações do formulário
     customizationForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        if (orderState.selectedItemIndex === null) return;
+        if (orderState.selectedItemIndex === null || !orderState.items[orderState.selectedItemIndex]) {
+            alert("Nenhum item selecionado para salvar.");
+            return;
+        }
 
         const formData = new FormData(this);
         const item = orderState.items[orderState.selectedItemIndex];
@@ -134,9 +143,11 @@ document.addEventListener('DOMContentLoaded', function() {
         item.border = formData.get('border');
         item.extras = Array.from(formData.getAll('extras'));
         item.notes = formData.get('notes');
+        item.finalPrice = calculateItemPrice(item); // Calculate and store the final unit price
 
         renderOrderItems();
         calculateTotal();
+        alert("Alterações salvas para " + item.name);
     });
 
     // Finalizar pedido
@@ -146,10 +157,28 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Atualizar items no localStorage
-        localStorage.setItem('cartItems', JSON.stringify(orderState.items));
+        const itemsToStore = orderState.items.map(item => {
+            const finalPrice = item.finalPrice !== undefined ? item.finalPrice : calculateItemPrice(item);
+            // IMPORTANT: Ensure item.id is the numeric ID of the PizzaSabor
+            if (typeof item.id !== 'number' && isNaN(parseInt(item.id))) {
+                console.error(`CRITICAL: Item ID (idSabor) is not a number for ${item.name}. Found: ${item.id}. This will cause backend errors.`);
+                alert(`Erro crítico: O ID do sabor para ${item.name} é inválido. Verifique o console para detalhes.`);
+                // Potentially stop the process here if an ID is invalid
+            }
+            return {
+                id: parseInt(item.id), // This is crucial, should be the Sabor ID
+                nome: item.name,
+                size: item.size || 'medium',
+                border: item.border || 'none',
+                extras: item.extras || [],
+                notes: item.notes || '',
+                quantidade: item.quantidade || 1,
+                finalPrice: finalPrice, // Store the calculated unit price
+            };
+        });
+
+        localStorage.setItem('cartItems', JSON.stringify(itemsToStore));
         
-        // Redirecionar para página de pagamento
         window.location.href = 'pagamento.html';
     });
 
