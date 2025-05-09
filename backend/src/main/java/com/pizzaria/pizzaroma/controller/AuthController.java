@@ -23,7 +23,7 @@ import com.pizzaria.pizzaroma.service.AuthService;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "*")
+// @CrossOrigin(origins = "*")
 public class AuthController {
     
     private final AuthService authService;

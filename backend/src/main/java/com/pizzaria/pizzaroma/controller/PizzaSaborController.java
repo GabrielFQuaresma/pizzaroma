@@ -29,7 +29,16 @@ public class PizzaSaborController {
 
     @PostMapping("/adicionar")
     public ResponseEntity<?> adicionarSabor(@RequestBody CriarPizzaSaborRequest request,
-                                            @RequestHeader("Authorization") String token) {
+                                            @RequestHeader("Authorization") String authorizationHeader) {
+
+        String token = null;
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            token = authorizationHeader.substring(7);
+        } else {
+            // Handle case where token is not in the correct format or missing
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token de autorização ausente ou mal formatado.");
+        }
+
         String role = jwtService.extractRole(token);
         if (!"ADMIN".equalsIgnoreCase(role)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso negado");

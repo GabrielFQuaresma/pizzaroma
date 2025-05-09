@@ -151,17 +151,19 @@ document.addEventListener('DOMContentLoaded', () => {
     //Verificação de login
         const token = localStorage.getItem('jwtToken');
         let isLoggedIn = false;
+        let userRole = null;
 
         if (token) {
             try {
-                const decoded = jwt_decode(token);
+                const decoded = jwt_decode(token); // Ensure jwt_decode is available
                 const currentTime = Date.now() / 1000;
 
                 if (decoded.exp && decoded.exp > currentTime) {
                     isLoggedIn = true;
+                    userRole = decoded.role; // Assuming 'role' is in your JWT payload
                 } else {
                     // Token expirado - remova do localStorage
-                    console.log("Sessão expirou.")
+                    console.log("Sessão expirou.");
                     localStorage.removeItem('jwtToken');
                 }
             } catch (error) {
@@ -170,10 +172,39 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        document.getElementById('userProfile').addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = isLoggedIn ? './modules/userInfo.html' : './modules/login.html';
-        });
+        // Adicionar link "Cadastrar Pizza" se for admin
+        if (isLoggedIn && userRole === 'ADMIN') {
+            const navbarNav = document.querySelector('#navbarNav .navbar-nav');
+            if (navbarNav) {
+                const cadastrarPizzaLi = document.createElement('li');
+                cadastrarPizzaLi.classList.add('nav-item');
+                cadastrarPizzaLi.innerHTML = `<a class="nav-link" href="./modules/cadastroPizza.html">Cadastrar Pizza</a>`;
+                
+                // Inserir antes do último item (ou ajustar conforme necessário)
+                // Se houver um ícone de usuário ou carrinho, pode ser antes deles
+                const userProfileLink = document.getElementById('userProfileLink'); // Assuming your user icon/link has this ID
+                if (userProfileLink && userProfileLink.parentElement.classList.contains('nav-item')) {
+                    navbarNav.insertBefore(cadastrarPizzaLi, userProfileLink.parentElement);
+                } else {
+                     // Fallback: Adiciona ao final da lista de navegação principal se não encontrar um ponto específico
+                    const lastNavItem = navbarNav.querySelector('.nav-right') || navbarNav.lastElementChild;
+                    if (lastNavItem) {
+                         navbarNav.insertBefore(cadastrarPizzaLi, lastNavItem);
+                    } else {
+                        navbarNav.appendChild(cadastrarPizzaLi); // Append if no other items or specific target
+                    }
+                }
+            }
+        }
+
+        const userProfileElement = document.getElementById('userProfile');
+        if (userProfileElement) {
+            userProfileElement.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = isLoggedIn ? './modules/userInfo.html' : './modules/login.html';
+            });
+        }
+
 
     // Inicialização do carrinho
     atualizarCarrinho();
