@@ -212,6 +212,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    if (isLoggedIn && (userRole === 'ADMIN' || userRole === 'FUNCIONARIO')) {
+        const gerenciarPedidosNavItem = document.getElementById('gerenciarPedidosNavItem');
+        if (gerenciarPedidosNavItem) {
+            gerenciarPedidosNavItem.style.display = 'list-item'; // Ou 'block' dependendo do CSS
+        }
+    }
+
     if (isLoggedIn && userRole === 'ADMIN') {
         const navbarNav = document.querySelector('#navbarNav .navbar-nav');
         if (navbarNav) {
