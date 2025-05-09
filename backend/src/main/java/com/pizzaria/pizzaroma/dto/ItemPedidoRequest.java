@@ -4,6 +4,7 @@ import com.pizzaria.pizzaroma.entity.BordaRecheada;
 import com.pizzaria.pizzaroma.entity.TamanhoPizza;
 
 import lombok.Data;
+import lombok.Setter;
 
 @Data
 public class ItemPedidoRequest {
@@ -12,4 +13,7 @@ public class ItemPedidoRequest {
     private BordaRecheada borda;
     private String ingredientesAdicionais;
     private String observacoes;
+    private int quantidade;
+    private double precoUnitario;
+
 }

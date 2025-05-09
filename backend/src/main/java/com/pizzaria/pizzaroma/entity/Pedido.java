@@ -43,6 +43,8 @@ public class Pedido {
     private String bairro;
     private String cidade;
 
+    private Double valorParaTroco;
+
     @Enumerated(EnumType.STRING)
     private StatusPedido status = StatusPedido.PREPARANDO;
 

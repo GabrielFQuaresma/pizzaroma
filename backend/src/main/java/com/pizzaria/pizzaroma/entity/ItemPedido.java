@@ -30,8 +30,12 @@ public class ItemPedido {
     private BordaRecheada borda;
 
     private String observacoes;
+    private int quantidade;
+    private double precoUnitario;
 
     @ManyToOne
     private Pedido pedido;
+
+    
 }
 
