@@ -1,6 +1,5 @@
 // Estado da aplicação
 let carrinho = [];
-let isLoggedIn = false;
 
 // Classe para gerenciar o carrinho
 class CarrinhoItem {
@@ -148,11 +147,33 @@ document.addEventListener('DOMContentLoaded', () => {
         // cartModal.hide();
     });
 
-    // Perfil do usuário
-    document.getElementById('userProfile').addEventListener('click', (e) => {
-        e.preventDefault();
-        window.location.href = isLoggedIn ? 'profile.html' : './modules/login.html';
-    });
+
+    //Verificação de login
+        const token = localStorage.getItem('jwtToken');
+        let isLoggedIn = false;
+
+        if (token) {
+            try {
+                const decoded = jwt_decode(token);
+                const currentTime = Date.now() / 1000;
+
+                if (decoded.exp && decoded.exp > currentTime) {
+                    isLoggedIn = true;
+                } else {
+                    // Token expirado - remova do localStorage
+                    console.log("Sessão expirou.")
+                    localStorage.removeItem('jwtToken');
+                }
+            } catch (error) {
+                console.error('Token inválido ou malformado', error);
+                localStorage.removeItem('jwtToken');
+            }
+        }
+
+        document.getElementById('userProfile').addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = isLoggedIn ? './modules/userInfo.html' : './modules/login.html';
+        });
 
     // Inicialização do carrinho
     atualizarCarrinho();

@@ -1,8 +1,10 @@
 package com.pizzaria.pizzaroma.entity;
 
 import jakarta.persistence.Entity;
+import lombok.Getter;
 
 @Entity
+@Getter
 public class Cliente extends Usuario{
     private String telefone;
 

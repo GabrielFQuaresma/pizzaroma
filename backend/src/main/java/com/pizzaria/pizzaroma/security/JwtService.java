@@ -47,6 +47,16 @@ public class JwtService {
         return !extractClaims(token).getExpiration().before(new Date());
     }
 
+    public String extractEmailFromToken(String token) {
+        return Jwts.parserBuilder()
+            .setSigningKey(getKey())
+            .build()
+            .parseClaimsJws(token.replace("Bearer ", ""))
+            .getBody()
+            .getSubject();
+    }
+    
+
     private Claims extractClaims(String token){
         return Jwts.parserBuilder()
                 .setSigningKey(getKey())
