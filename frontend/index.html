@@ -32,12 +32,16 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#sobre">Sobre</a>
                     </li>
+                    <li class="nav-item" id="gerenciarPedidosNavItem" style="display: none;">
+                        <a class="nav-link" href="./modules/gerenciarPedidos.html">Gerenciar Pedidos</a>
+                    </li>
                 </ul>
                 <div class="nav-right">
                     <a href="#" class="cart-icon" id="cartButton">
                         <i class="bi bi-cart3"></i>
                         <span class="cart-count">0</span>
                     </a>
+                    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
                     <a href="#" class="user-icon" id="userProfile">
                         <i class="bi bi-person-circle"></i>
                     </a>
@@ -65,33 +69,7 @@
             <div class="container">
                 <h2>Promoções em Destaque</h2>
                 <div class="promotions-grid">
-                    <div class="promo-card">
-                        <img src="assets/img/pizza1.jpg" alt="Pepperoni Delight">
-                        <div class="promo-info">
-                            <h3>Pepperoni Especial</h3>
-                            <p>Dobro de pepperoni por tempo limitado!</p>
-                            <span class="price">R$ 49,90</span>
-                            <button class="add-to-cart-btn">Adicionar ao Carrinho</button>
-                        </div>
-                    </div>
-                    <div class="promo-card">
-                        <img src="assets/img/pizza2.jpg" alt="Margherita Tradicional" >
-                        <div class="promo-info">
-                            <h3>Margherita Tradicional</h3>
-                            <p>A clássica italiana com manjericão fresco</p>
-                            <span class="price">R$ 45,90</span>
-                            <button class="add-to-cart-btn">Adicionar ao Carrinho</button>
-                        </div>
-                    </div>
-                    <div class="promo-card">
-                        <img src="assets/img/pizza3.jpg" alt="Portuguesa" >
-                        <div class="promo-info">
-                            <h3>Portuguesa</h3>
-                            <p>A favorita dos brasileiros</p>
-                            <span class="price">R$ 47,90</span>
-                            <button class="add-to-cart-btn">Adicionar ao Carrinho</button>
-                        </div>
-                    </div>
+                    <!-- Cards de promoção serão carregados dinamicamente pelo JavaScript -->
                 </div>
             </div>
         </section>
@@ -113,60 +91,7 @@
 
                 <!-- Grid de Pizzas -->
                 <div class="pizzas-grid">
-                    <div class="pizza-card">
-                        <img src="assets/img/pizza1.jpg" alt="Pepperoni">
-                        <div class="pizza-info">
-                            <h3>Pepperoni</h3>
-                            <p>Molho de tomate, mussarela e pepperoni</p>
-                            <span class="price">R$ 49,90</span>
-                            <button class="add-to-cart-btn">Adicionar ao Carrinho</button>
-                        </div>
-                    </div>
-                    <div class="pizza-card">
-                        <img src="assets/img/pizza2.jpg" alt="Margherita">
-                        <div class="pizza-info">
-                            <h3>Margherita</h3>
-                            <p>Molho de tomate, mussarela, manjericão e azeite</p>
-                            <span class="price">R$ 45,90</span>
-                            <button class="add-to-cart-btn">Adicionar ao Carrinho</button>
-                        </div>
-                    </div>
-                    <div class="pizza-card">
-                        <img src="assets/img/pizza3.jpg" alt="Portuguesa">
-                        <div class="pizza-info">
-                            <h3>Portuguesa</h3>
-                            <p>Molho de tomate, mussarela, presunto, ovo, cebola e azeitona</p>
-                            <span class="price">R$ 47,90</span>
-                            <button class="add-to-cart-btn">Adicionar ao Carrinho</button>
-                        </div>
-                    </div>
-                    <div class="pizza-card">
-                        <img src="assets/img/pizza4.jpg" alt="Quatro Queijos">
-                        <div class="pizza-info">
-                            <h3>Quatro Queijos</h3>
-                            <p>Molho de tomate, mussarela, provolone, gorgonzola e parmesão</p>
-                            <span class="price">R$ 48,90</span>
-                            <button class="add-to-cart-btn">Adicionar ao Carrinho</button>
-                        </div>
-                    </div>
-                    <div class="pizza-card">
-                        <img src="assets/img/pizza5.jpg" alt="Frango com Catupiry">
-                        <div class="pizza-info">
-                            <h3>Frango com Catupiry</h3>
-                            <p>Molho de tomate, mussarela, frango desfiado e catupiry</p>
-                            <span class="price">R$ 46,90</span>
-                            <button class="add-to-cart-btn">Adicionar ao Carrinho</button>
-                        </div>
-                    </div>
-                    <div class="pizza-card">
-                        <img src="assets/img/pizza6.jpg" alt="Calabresa">
-                        <div class="pizza-info">
-                            <h3>Calabresa</h3>
-                            <p>Molho de tomate, mussarela, calabresa e cebola</p>
-                            <span class="price">R$ 44,90</span>
-                            <button class="add-to-cart-btn">Adicionar ao Carrinho</button>
-                        </div>
-                    </div>
+                    <!-- Cards de pizza serão carregados dinamicamente pelo JavaScript -->
                 </div>
             </div>
         </section>
@@ -218,6 +143,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/scripts/api.js"></script> <!-- Adicionado para definir API_BASE_URL -->
     <script src="assets/scripts/index.js"></script>
 </body>
 </html>

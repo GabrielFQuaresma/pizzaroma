@@ -1,0 +1,161 @@
+body {
+    background-color: var(--background-color); /* Ensure background consistency */
+    padding-top: 70px; /* Adjust if navbar height is different */
+}
+
+.user-info-container {
+    min-height: calc(100vh - 140px - 160px); /* Full viewport height minus navbar and footer */
+    margin-bottom: 3rem;
+}
+
+.page-title {
+    color: var(--text-color);
+    font-weight: bold;
+    text-align: center;
+    padding-top: 1rem;
+}
+
+/* Tab Styles */
+.user-info-tabs .nav-link {
+    color: var(--text-color);
+    font-weight: 500;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 0.75rem 1.5rem;
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.user-info-tabs .nav-link:hover {
+    color: var(--primary-color);
+}
+
+.user-info-tabs .nav-link.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    background-color: transparent; /* Override Bootstrap's default active tab background */
+}
+
+/* Profile Card Styles */
+.profile-card {
+    background-color: var(--card-background);
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    padding: 1.5rem;
+}
+
+.profile-card .card-title {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.profile-card .form-label {
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 0.3rem;
+}
+
+.profile-card .user-detail {
+    font-size: 1rem;
+    color: var(--text-color);
+    background-color: #f8f9fa;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #eee;
+}
+
+.edit-profile-btn {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    padding: 0.6rem 1.5rem;
+}
+
+.edit-profile-btn:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+/* Order History Styles */
+.order-item {
+    background-color: var(--card-background);
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: box-shadow 0.3s ease;
+}
+
+.order-item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.order-id {
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+.order-date, .order-status {
+    font-size: 0.9rem;
+}
+
+.order-status.status-delivered {
+    color: #28a745; /* Green for delivered */
+}
+
+.order-status.status-processing {
+    color: #ffc107; /* Yellow for processing */
+}
+
+.order-status.status-cancelled {
+    color: #dc3545; /* Red for cancelled */
+}
+
+.order-total {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.view-details-btn {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    font-size: 0.85rem;
+    padding: 0.3rem 0.8rem;
+}
+
+.view-details-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.no-orders {
+    color: #777;
+    font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .user-info-tabs .nav-link {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+    .profile-card .user-detail {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-title {
+        font-size: 1.8rem;
+    }
+    .user-info-tabs {
+        justify-content: center;
+    }
+    .order-item .d-flex {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+    .order-item .text-end {
+        text-align: left !important;
+        margin-top: 0.5rem;
+    }
+}
