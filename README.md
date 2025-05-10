@@ -5,7 +5,7 @@ PizzaRoma
 
 * Pedro Rodrigues Alves
 * Gabriel Felipe Quaresma de Oliveira
-* Lucas Gualtieri Firace Envangelista
+* Lucas Gualtieri Fibonaci Envangelista
 
 ## Professores responsáveis
 
